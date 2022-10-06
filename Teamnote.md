@@ -625,8 +625,9 @@ ___
 ### Well-known Combinatorics sequences
 
 #### Catalan Numbers
-
+    
 #### Stirling Numbers
+
 ___
 ## String
 
