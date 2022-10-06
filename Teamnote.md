@@ -11,21 +11,20 @@ ___
 - Hibye1217's tip
 - Bitmask 
 - Knapsack
-- Tree DP <= 이거 두개는 난 모름;;
+- Tree DP
 
 ### Geometry
 - CCW + Convex Hull 
 - Line-segment intersection
-- Minimum Enclosing Circle with Heuristic Alg. <= 나오긴 할까?
-- Rotating calipers <= 넣으면 쓸수 있나?
-- 
+- Minimum Enclosing Circle with Heuristic Alg.
+- Rotating calipers
 
 ### Graphs
-- 2-sat Problem <= 난 몰루;;
+- 2-sat Problem
 - Dijkstra
 - LCA
 - MST
-- 
+- Topological sort
 
 ### Mathematics
 - Chinese Remainder Theorem 
@@ -33,7 +32,7 @@ ___
 - Fast Fourier Transformation
 - Fibonacci with Matrices
 - FlT(Fermat's little Theorem)
-- Mobius inversion formula <= 이건 쓸수 있나?
+- Mobius inversion formula
     - Mobius function
 - Well-known Combinatorics sequences
     - Catalan Numbers
@@ -41,12 +40,12 @@ ___
     - 더 아는거 있으면 추가좀
 
 ### String
-- kmp <= ㅋㅋ;;
-- Manacher <= ?
-- trie <= 아는사람 있나?
+- kmp
+- Manacher
+- trie
 
 ### Others
-- Sprague-Grundy <= ;;
+- Sprague-Grundy
 
 ___
 ## Tips
@@ -390,8 +389,6 @@ ___
 
 ### 2-sat Problem
 
-### Dijkstra
-
 ### LCA
     vector<int> tree[100010];
     int parent[100010][20];
@@ -475,6 +472,62 @@ ___
         }
     }
 ### MST
+    int main(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);
+        cin >> v >> e;
+        while(e--){
+            int a, b, c;
+            cin >> a >> b >> c;
+            edges.push_back({c,{a,b}});
+        }
+        for(int i=1; i<=v; i++){
+            parent[i] = i;
+        }
+        sort(edges.begin(),edges.end());
+        for(auto cur:edges){
+            int root1 = fnd(cur.st);
+            int root2 = fnd(cur.en);
+            if(root1==root2) continue;
+            mst += cur.cost;
+            uni(cur.st, cur.en);
+        }
+        cout << mst;
+    }
+### Topological Sort
+    int n,m;
+
+    vector<int>edges[32005];
+    vector<int>ans;
+
+    int inDegree[32005];
+
+    int main(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);
+        cin >> n >> m;
+        while(m--){
+            int st, en;
+            cin >> st >> en;
+            edges[st].push_back(en);
+            inDegree[en]++;
+        }
+        queue<int>q;
+        for(int i=1; i<=n; i++){
+            if(inDegree[i]==0) q.push(i);
+        }
+        while(!q.empty()){
+            int cur = q.front();
+            q.pop();
+            ans.push_back(cur);
+            for(auto nxt:edges[cur]){
+                inDegree[nxt]--;
+                if(inDegree[nxt]==0) q.push(nxt);
+            }
+        }
+        for(int &i:ans) cout << i << ' ';
+    }
+
 ___
 ## Mathematics
 
