@@ -339,7 +339,50 @@ ___
         return (ab <=0 && cd <=0);
     }
 ### Minimum Enclosing Circle with Heuristic Alg.
+    pld coords[1005];
 
+    ld dst(pld p1, pld p2){
+        return (p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y);
+    }
+
+    int main(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);
+        cout.setf(ios::fixed); cout.precision(PRECISION);
+
+        ld centerX = 0, centerY = 0, ratio=0.1, r;
+        cin >> n;
+        for(int i=0; i<n; i++){
+            ld px, py;
+            cin >> px >> py;
+            centerX += px;
+            centerY += py;
+            coords[i]={px,py};    
+        }
+        //the mean position of all the coordinates on the plane
+        centerX /= n;
+        centerY /= n;
+        //shuffling
+        unsigned int seed = 0;
+        shuffle(coords, coords+n, default_random_engine(seed));
+        for(int i=0; i<=30000; i++){
+            r = -1;
+            int cursor = -1;
+            for(int j=0; j<n; j++){
+                ld newR = dst(coords[j],{centerX, centerY});
+                if(r<newR){
+                    r=newR;
+                    cursor = j;
+                }
+            }
+            centerX = centerX+(coords[cursor].x-centerX)*ratio;
+            centerY = centerY+(coords[cursor].y-centerY)*ratio;
+            ratio *= 0.999;
+        }
+        if((int)(centerX*1000)==0) centerX=0;
+        if((int)(centerX*1000)==0) centerY=0;
+        cout << centerX << ' ' << centerY << '\n' << sqrtl(r);
+    }
 ### Rotating calipers
 
 ___
