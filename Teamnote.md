@@ -133,7 +133,36 @@ ___
 ### Sparse Table
 
 ### Union-find(Disjoint Set)
+    int par[1000010];
+    int depth[1000010];
 
+    void init() {
+        for (int i = 0; i < 1000010; i++) {
+            par[i] = i;
+        }
+    }
+
+    int ans(int x) {
+        if (par[x] == x) return x;
+        else return par[x] = ans(par[x]);
+    }
+
+    void uni(int x, int y) {
+        if (ans(x) == ans(y)) return;
+        else {
+            int ax = ans(x);
+            int ay = ans(y);
+            if (depth[ax] < depth[ay]) {
+                par[ax] = ay;
+            }
+            else {
+                par[ay] = ax;
+            }
+            if (depth[ax] == depth[ay]) {
+                depth[ax]++;
+            }
+        }
+    }
 ___
 
 ## DP Techniques
