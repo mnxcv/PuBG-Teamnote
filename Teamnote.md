@@ -5,7 +5,6 @@ ___
 
 ### Data_structures
 - (Lazy) Segment Tree 
-- Sparse Table
 - Union-find(Disjoint Set)
 
 ### DP Techniques
@@ -129,8 +128,6 @@ ___
             return leftq+rightq;
         }
     };
-### Sparse Table
-
 ### Union-find(Disjoint Set)
     int par[1000010];
     int depth[1000010];
@@ -333,40 +330,6 @@ ___
     }
 
 ### Line-segment intersection
-    include <bits/stdc++.h>
-    using namespace std;
-
-    #define X first
-    #define Y second
-    #define PRECISION 0
-
-    using ll = long long;
-    using ld = long double;
-
-    using point = pair<ll,ll>;
-    using vec = pair<ll,ll>;
-
-    int sgn(ll x){return (x > 0) - (x < 0);}
-
-    vec get_vector(point a, point b){
-        return {b.X-a.X, b.Y-a.Y};
-    }
-
-    int ccw(vec u, vec v){
-        ll cross_product = u.X*v.Y - u.Y*v.X;
-        return sgn(cross_product);
-    }
-
-    int ccw(point p1, point p2, point p3){
-        vec u = get_vector(p1, p2);
-        vec v = get_vector(p2, p3);
-        return ccw(u,v);
-    }
-
-    vec rev(vec v1){
-        return {-1*v1.X, -1*v1.Y};
-    }
-
     bool intersect(point p1, point p2, point p3, point p4){
         int ab = ccw(p1,p2,p3)*ccw(p1,p2,p4);
         int cd = ccw(p3,p4,p1)*ccw(p3,p4,p2);
@@ -374,18 +337,6 @@ ___
             return (min(p1,p2)<=max(p3,p4) && min(p3,p4)<=max(p1,p2));
         }
         return (ab <=0 && cd <=0);
-    }
-
-
-    int main(){
-        ios::sync_with_stdio(0);
-        cin.tie(0);
-        cout.setf(ios::fixed); cout.precision(PRECISION);
-
-        ll x1, y1, x2, y2, x3, y3, x4, y4;
-        cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;
-        bool flg = false;
-        cout << intersect({x1,y1}, {x2,y2}, {x3,y3}, {x4,y4});
     }
 ### Minimum Enclosing Circle with Heuristic Alg.
 
@@ -399,7 +350,87 @@ ___
 ### Dijkstra
 
 ### LCA
+    vector<int> tree[100010];
+    int parent[100010][20];
+    bool visited[100010];
+    int depth[100010];
 
+    signed main() {
+        int n; cin >> n;
+        for (int i = 1; i < n; i++) {
+            int tmp1, tmp2;
+            cin >> tmp1 >> tmp2;
+            tree[tmp1].push_back(tmp2);
+            tree[tmp2].push_back(tmp1);
+        }
+        //n
+        queue<int> q;
+        q.push(1);
+        visited[1] = true;
+        parent[1][0] = 1;
+        depth[1] = 1;
+        while (!q.empty()) {
+            int tmp = q.front();
+            q.pop();
+            for (int& i : tree[tmp]) {
+                if (!visited[i]) {
+                    q.push(i);
+                    visited[i] = true;
+                    depth[i] = depth[tmp] + 1;
+                    parent[i][0] = tmp;
+                }
+            }
+        }
+        //2*n
+        for (int i = 1; i < 20; i++) {
+            for (int j = 1; j <= n; j++) {
+                parent[j][i] = parent[parent[j][i - 1]][i - 1];
+            }
+        }
+        //n*20
+        int m;
+        cin >> m;
+        for (int i = 0; i < m; i++) {
+            int tmp1, tmp2;
+            cin >> tmp1 >> tmp2;
+            if (depth[tmp1] > depth[tmp2]) {
+                int ascend = depth[tmp1] - depth[tmp2];
+                int ascendtmp = ascend;
+                for (int i = 0; i <= log2(ascend); i++) {
+                    if (ascendtmp % 2) tmp1 = parent[tmp1][i];
+                    ascendtmp /= 2;
+                }
+            }
+            else if (depth[tmp1] < depth[tmp2]) {
+                int ascend = depth[tmp2] - depth[tmp1];
+                int ascendtmp = ascend;
+                for (int i = 0; i <= log2(ascend); i++) {
+                    if (ascendtmp % 2) tmp2 = parent[tmp2][i];
+                    ascendtmp /= 2;
+                }
+            }
+            while (tmp1 != tmp2) {
+                debug(tmp1);
+                debug(tmp2);
+                for (int i = 0; i <= log2(depth[tmp1]) + 2; i++) {
+                    if (parent[tmp1][i] == parent[tmp2][i]) {
+                        if (!i) {
+                            tmp1 = parent[tmp1][i];
+                            tmp2 = parent[tmp2][i];
+                            break;
+                        }
+                        else {
+                            tmp1 = parent[tmp1][i - 1];
+                            tmp2 = parent[tmp2][i - 1];
+                            break;
+                        }
+                    }
+                }
+            }
+            cout << tmp1 << '\n';
+
+        }
+    }
 ### MST
 ___
 ## Mathematics
