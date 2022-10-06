@@ -111,6 +111,53 @@ ___
 
 ### Fast Fourier Transformation
 
+참고 : long double 쓰다가 터질(TLE)수 있음
+
+    typedef complex<ld> cpld;
+    const ld PI = acosl(-1);
+    void fft(vector<cpld>& series1, /*cpld w, */bool inverse = false, bool rounding = false) {
+        int sz = series1.size();
+        int revbit = 0;
+        for (int i = 1; i < sz; i++) {
+            int bit = sz / 2;
+            while (((revbit ^= bit) & bit) == 0) bit /= 2;
+            if (i < revbit) swap(series1[i], series1[revbit]);
+        }
+        for (int i = 1; i < sz; i *= 2) {
+            ld x = PI * (-2 *inverse + 1) / i;
+            cpld w = cpld(cos(x), sin(x));
+            for (int j = 0; j < sz; j += i * 2) {
+                cpld wp = cpld(1, 0);
+                for (int k = 0; k < i; k++) {
+                    cpld tmp = series1[i + j + k] * wp;
+                    series1[i + j + k] = series1[j + k] - tmp;
+                    series1[j + k] += tmp;
+                    wp *= w;
+                }
+            }
+        }
+        if (inverse) {
+            for (int i = 0; i < sz; i++) {
+                series1[i] /= cpld(sz, 0);
+                if(rounding) series1[i] = cpld(round(series1[i].real()), round(series1[i].imag()));
+            }
+        }
+    }
+    vector<cpld> multiple(vector<cpld>& v1, vector<cpld>& v2) {
+        int n = 1;
+        while (n <= v1.size() || n <= v2.size()) n <<= 1;
+        n <<= 1;
+        v1.resize(n); v2.resize(n);
+        vector<cpld> res(n);
+        cpld w = cpld(cos(2 * PI / n), sin(2 * PI / n));
+        fft(v1); fft(v2);
+        for (int i = 0; i < n; i++) {
+            res[i] = v1[i] * v2[i];
+        }
+        fft(res, true, true);
+        return res;
+    }
+
 ### Fibonacci with Matrices
 
 ### FlT(Fermat's little Theorem)
