@@ -296,7 +296,41 @@ ___
 ## String
 
 ### kmp
-
+    vector<int>pos;
+    vector<int> computeTable(string s){
+        int en = s.size();
+        int i=0;
+        vector<int> lps(en, 0);
+        for(int j=1; j<en; j++){
+            while(i>0 && s[i] != s[j]){
+                i = lps[i-1];
+            }
+            if(s[i]==s[j]){
+                lps[j] = ++i;
+            }
+        }
+        return lps;
+    }
+    void kmp(string original, string tofind){
+        vector<int>table = computeTable(tofind);
+        int oSize = original.size();
+        int tSize = tofind.size();
+        int j=0;
+        for(int i=0; i<oSize; i++){
+            while(j > 0 && original[i]!=tofind[j]){
+                j = table[j-1];
+            }
+            if(original[i] == tofind[j]){
+                if(j == tSize-1){
+                    pos.push_back(i-tSize+2);
+                    j = table[j];
+                }
+                else{
+                    j++;
+                }
+            }
+        }
+    }
 ### Manacher
 
 ### trie
