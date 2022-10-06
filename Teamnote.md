@@ -532,7 +532,37 @@ ___
     }
 
 ### Fibonacci with Matrices
+    typedef struct pair<pair<long long int, long long int>, pair<long long int, long long int>> mat;
 
+    mat I = make_pair(make_pair(0, 1), make_pair(1, 1));
+
+    mat matip(mat matrix1, mat matrix2) {
+        mat res;
+        res.first.first = (matrix1.first.first * matrix2.first.first + matrix1.first.second * matrix2.second.first) % INT;
+        res.first.second = (matrix1.first.first * matrix2.first.second + matrix1.first.second * matrix2.second.second) % INT;
+        res.second.first = (matrix1.second.first * matrix2.first.first + matrix1.second.second * matrix2.second.first) % INT;
+        res.second.second = (matrix1.second.first * matrix2.first.second + matrix1.second.second * matrix2.second.second) % INT;
+        return res;
+    }
+
+
+    mat multiple(mat matrix, long long int k) {
+        if (k == 1) return matrix;
+        if (k % 2) return matip(I, multiple(matrix, k - 1));
+        else {
+            mat half = multiple(matrix, k / 2);
+            return matip(half, half);
+        }
+    }
+
+    int main() {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL); cout.tie(NULL);
+
+        long long int n;
+        cin >> n;
+        cout << multiple(I, n).second.first << '\n';
+    }
 ### FlT(Fermat's little Theorem)
 
 ### Mobius inversion formula
