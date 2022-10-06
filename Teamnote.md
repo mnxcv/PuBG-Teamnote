@@ -15,8 +15,7 @@ ___
 - Tree DP <= 이거 두개는 난 모름;;
 
 ### Geometry
-- CCW <= 너무 쉬운가?
-- Convex Hull 
+- CCW + Convex Hull 
 - Line-segment intersection
 - Minimum Enclosing Circle with Heuristic Alg. <= 나오긴 할까?
 - Rotating calipers <= 넣으면 쓸수 있나?
@@ -232,9 +231,106 @@ DP의 시간복잡도는 초항 수 × 초항 계산에 걸리는 시간 + 상�
 ___
 ## Geometry
 
-### CCW
+### CCW + Convex Hull
+    #include <bits/stdc++.h>
+    using namespace std;
 
-### Convex Hull
+    #define X first
+    #define Y second
+    #define PRECISION 0
+
+    using ll = long long;
+    using ld = long double;
+
+    using point = pair<ll,ll>;
+    using vec = pair<ll,ll>;
+
+    int sgn(ll x){return (x > 0) - (x < 0);}
+
+    vec get_vector(point a, point b){
+        return {b.X-a.X, b.Y-a.Y};
+    }
+
+    int ccw(vec u, vec v){
+        ll cross_product = u.X*v.Y - u.Y*v.X;
+        return sgn(cross_product);
+    }
+
+    int ccw(point p1, point p2, point p3){
+        vec u = get_vector(p1, p2);
+        vec v = get_vector(p2, p3);
+        return ccw(u,v);
+    }
+
+    vec rev(vec v1){
+        return {-1*v1.X, -1*v1.Y};
+    }
+
+    bool intersect(point p1, point p2, point p3, point p4){
+        int ab = ccw(p1,p2,p3)*ccw(p1,p2,p4);
+        int cd = ccw(p3,p4,p1)*ccw(p3,p4,p2);
+        if(ab==0 && cd==0){
+            return (min(p1,p2)<=max(p3,p4) && min(p3,p4)<=max(p1,p2));
+        }
+        return (ab <=0 && cd <=0);
+    }
+
+    ll ans;
+    int n;
+    point p[100005];
+
+    int main(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);
+        cout.setf(ios::fixed); cout.precision(PRECISION);
+
+        cin >> n;
+        for(int i=0; i<n; i++){
+            ll x, y;
+            cin >> x >> y;
+            p[i] = {x,y};
+        }
+        sort(p, p+n);
+        vector<point>hull;
+        for(int i=0; i<n; i++){
+            if(hull.size()<2){
+                hull.push_back(p[i]);
+            }
+            else{
+                while(hull.size()>=2){
+                    if(ccw(hull[hull.size()-1], hull[hull.size()-2], p[i])<=0){
+                        hull.pop_back();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                hull.push_back(p[i]);
+            }
+        }
+        ans += hull.size();
+        while(!hull.empty()) hull.pop_back();
+
+        sort(p, p+n, greater<point>());
+        for(int i=0; i<n; i++){
+            if(hull.size()<2){
+                hull.push_back(p[i]);
+            }
+            else{
+                while(hull.size()>=2){
+                    if(ccw(hull[hull.size()-1], hull[hull.size()-2], p[i])<=0){
+                        hull.pop_back();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                hull.push_back(p[i]);
+            }
+        }
+        ans += hull.size();
+        cout << ans - 2;
+    }
 
 ### Line-segment intersection
 
