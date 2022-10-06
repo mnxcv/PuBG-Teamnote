@@ -10,6 +10,7 @@ ___
 - Union-find(Disjoint Set)
 
 ### DP Techniques
+- Hibye1217's tip
 - Bitmask 
 - Knapsack
 - Tree DP <= 이거 두개는 난 모름;;
@@ -62,6 +63,76 @@ ___
 
 ### Segment Tree
 
+### Sparse Table
+
+### Union-find(Disjoint Set)
+
 ___
 
-##
+## DP Techniques
+
+### Hibye1217's tip
+
+### Bitmask
+
+### Knapsack
+
+### Tree DP
+
+___
+## Geometry
+
+### CCW
+
+### Convex Hull
+
+### Line-segment intersection
+
+### Minimum Enclosing Circle with Heuristic Alg.
+
+### Rotating calipers
+
+___
+## Graphs
+
+### 2-sat Problem
+
+### Dijkstra
+
+### LCA
+
+### MST
+___
+## Mathematics
+
+### Chinese Remainder Theorem 
+
+### Euler's Phi function
+
+### Fast Fourier Transformation
+
+### Fibonacci with Matrices
+
+### FlT(Fermat's little Theorem)
+
+### Mobius inversion formula
+
+#### Mobius function
+
+### Well-known Combinatorics sequences
+
+#### Catalan Numbers
+
+#### Stirling Numbers
+___
+## String
+
+### kmp
+
+### Manacher
+
+### trie
+___
+## Others
+
+### Sprague-Grundy
