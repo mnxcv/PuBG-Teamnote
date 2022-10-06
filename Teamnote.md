@@ -62,7 +62,75 @@ ___
 ## Data_Structures
 
 ### Segment Tree
+    class segment_tree {
+    private:
+        vector<ll> tree;
+        vector<ll> lazy;
 
+    public:
+        segment_tree(int N) {
+            tree.resize(4*N, 0LL);
+            lazy.resize(4*N, 0LL);
+        }
+
+        void init(int node, int start, int end){
+            if(start==end){
+                tree[node] = arr[start];
+            }
+            else{
+                int mid = (start+end)>>1;
+                init(2*node, start, mid);
+                init(2*node+1, mid+1, end);
+                tree[node] = tree[2*node] + tree[2*node+1];
+            }
+        }
+
+        void lazy_prop(int start, int end, int node){
+            if(lazy[node]){
+                tree[node] += (end-start+1)*lazy[node];
+
+                if(start!=end){
+                    lazy[2*node] += lazy[node];
+                    lazy[2*node+1] += lazy[node];
+                }
+
+                lazy[node]=0;
+            }
+        }
+
+        void update(int start, int end, int node, int left, int right, ll val) {
+            lazy_prop(start, end, node);
+
+            if(left>end || right<start) return;
+
+            if(start>=left && end<=right) {
+                tree[node] += (end-start+1)*val;
+                if(start!=end){
+                    lazy[node*2] += val;
+                    lazy[node*2+1] += val;
+                }
+                return;
+            }
+            int mid = (start+end)>>1;
+            update(start, mid, 2*node, left, right, val);
+            update(mid+1, end, 2*node+1, left, right, val);
+            tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        }
+
+        ll query(int start, int end, int node, int left, int right) {
+            lazy_prop(start, end, node);
+            if(left>end || right<start){
+                return 0;
+            }
+            if(left<=start && right>=end){
+                return tree[node];
+            }
+            int mid = (start+end)>>1;
+            ll leftq = query(start, mid, 2*node, left, right);
+            ll rightq = query(mid+1, end, 2*node+1, left, right);
+            return leftq+rightq;
+        }
+    };
 ### Sparse Table
 
 ### Union-find(Disjoint Set)
