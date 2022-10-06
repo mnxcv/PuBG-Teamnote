@@ -4,8 +4,7 @@ ___
 ### Tips 
 
 ### Data_structures
-- Segment Tree
-    - Lazy Segment Tree 
+- (Lazy) Segment Tree 
 - Sparse Table
 - Union-find(Disjoint Set)
 
@@ -61,7 +60,7 @@ ___
 
 ## Data_Structures
 
-### Segment Tree
+### (Lazy) Segment Tree
     class segment_tree {
     private:
         vector<ll> tree;
