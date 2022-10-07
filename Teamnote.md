@@ -658,34 +658,42 @@ ___
 ## String
 
 ### kmp
-    vector<int>pos;
+    vector<int>pos; //all instances of substring
+
+    //failure function
     vector<int> computeTable(string s){
-        int en = s.size();
-        int i=0;
-        vector<int> lps(en, 0);
-        for(int j=1; j<en; j++){
-            while(i>0 && s[i] != s[j]){
-                i = lps[i-1];
-            }
-            if(s[i]==s[j]){
-                lps[j] = ++i;
-            }
-        }
-        return lps;
-    }
-    void kmp(string original, string tofind){
-        vector<int>table = computeTable(tofind);
-        int oSize = original.size();
-        int tSize = tofind.size();
+        int en = s.size(); //end of string
+        vector<int> table(en, 0); //longest prefix suffix
+
         int j=0;
-        for(int i=0; i<oSize; i++){
-            while(j > 0 && original[i]!=tofind[j]){
+        for(int i=1; i<en; i++){
+            while(j>0 && s[i] != s[j]){
                 j = table[j-1];
             }
-            if(original[i] == tofind[j]){
-                if(j == tSize-1){
-                    pos.push_back(i-tSize+2);
-                    j = table[j];
+            if(s[i]==s[j]){
+                table[i] = ++j;
+            }
+        }
+        return table;
+    }
+
+    //find all positions in which the substring occurs
+    void kmp(string s, string t){
+        //s is full string t is substring
+
+        int lenS = s.size(); int lenT = t.size();
+
+        vector<int>f = computeTable(t);
+
+        int j=0;
+        for(int i=0; i<lenS; i++){
+            while(j > 0 && s[i]!=t[j]){
+                j = f[j-1];
+            }
+            if(s[i] == t[j]){
+                if(j == lenT-1){
+                    pos.push_back(i-lenT+2);
+                    j = f[j];
                 }
                 else{
                     j++;
@@ -693,6 +701,7 @@ ___
             }
         }
     }
+
 ### Manacher
 
 ### trie
