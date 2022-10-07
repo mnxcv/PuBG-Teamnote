@@ -29,6 +29,7 @@ ___
 ### Mathematics
 - Chinese Remainder Theorem 
 - Euler's Phi function
+- Extended Euclidean Algorithm
 - Fast Fourier Transformation
 - Fibonacci with Matrices
 - FlT(Fermat's little Theorem)
@@ -534,6 +535,31 @@ ___
 ### Chinese Remainder Theorem 
 
 ### Euler's Phi function
+
+### Extended Euclidean Algorithm
+    int gcd(int a, int b) {
+        if (b == 0) return 0;
+        else if (b == 1) return 1;
+        else if (!(a % b)) return b;
+        else return gcd(b, a % b);
+    }
+
+    pair<int, int> EEA(int a, int b, int c) {
+        if (a < b) {
+            pair<int, int> tmp = EEA(b, a, c);
+            return mp(tmp.second, tmp.first);
+        }
+        int gcdab = gcd(a, b);
+        if (c % gcdab) return mp(-1, -1); //mp(-1, -1) = Error
+        else if (gcdab != 1) return EEA(a / gcdab, b / gcdab, c / gcdab);
+        else {
+            if (b == 1) return mp(0, c);
+            else {
+                pair<int, int> tmp = EEA(b, a % b, c);
+                return mp(tmp.second, tmp.first - (a / b) * tmp.second);
+            }
+        }
+    }
 
 ### Fast Fourier Transformation
 
